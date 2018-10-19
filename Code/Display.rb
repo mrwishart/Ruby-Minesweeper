@@ -16,7 +16,7 @@ def display_grid(grid_array)
     #puts ""
     row_string = "#{row_number} "
     if row_number < 10
-      row_string = "0" + row_string
+      row_string = " " + row_string
     end
     for space in row
       row_string += "#{space} "
@@ -26,20 +26,27 @@ def display_grid(grid_array)
   end
 end
 
+# Generates an array of the alphabet
+
 def create_alphabet
   return ("A".."Z").to_a
 end
 
+# Generates an uncovered version of the game (either for a win or loss)
 
 def create_uncovered_grid(game_array)
+
   uncovered_grid = game_array.dup
-  p uncovered_grid.length
 
   for y in 0..uncovered_grid.length-1
     for x in 0..uncovered_grid[y].length-1
+      # If current square isn't a bomb...
       if !is_bomb(uncovered_grid[y][x])
+        # ...replace with number of surrounding bombs
         uncovered_grid[y][x] = count_surround_spaces(x, y, game_array)
+
       end
+
     end
   end
 
@@ -47,19 +54,28 @@ def create_uncovered_grid(game_array)
 
 end
 
+# Counts all of the surrounding spaces for bombs
+
 def count_surround_spaces(x, y, game_array)
+
+  # Get an array of all possible surrouding squares
   spaces_to_check = generate_surrounding_spaces(x, y)
+
   bombs_counted = 0
 
   for space in spaces_to_check
     space_y = space[0]
     space_x = space[1]
+
     bombs_counted += 1 if is_bomb(game_array[space_y][space_x])
+
   end
 
   return bombs_counted
 
 end
+
+# Generates surrounding squares, eliminating some if its an edge or corner
 
 def generate_surrounding_spaces(x, y)
    surround_array = []
@@ -75,6 +91,21 @@ def generate_surrounding_spaces(x, y)
 
   return surround_array
 end
+
+def uncover_square(player, solution, x, y, exclude)
+  player[y][x] = solution [y][x]
+  exclude.push([y,x])
+  if solution [y][x] == 0
+    surround = generate_surrounding_spaces(x,y)
+    for space in surround
+      if !exclude.include?(space)
+        uncover_square(player, solution, space[1], space[0], exclude)
+      end
+    end
+  end
+
+end
+
 
 def is_bomb(space)
   return space == BOMB_CHAR

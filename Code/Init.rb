@@ -4,8 +4,8 @@ OVERALL_AREA = SIZE_OF_GRID_X * SIZE_OF_GRID_Y
 NO_OF_BOMBS = 50
 BOMB_CHAR = "@"
 
-def generate_grid
-  new_grid = Array.new(SIZE_OF_GRID_Y) {Array.new(SIZE_OF_GRID_X){|x| x = 0}}
+def generate_grid(initial_value)
+  new_grid = Array.new(SIZE_OF_GRID_Y) {Array.new(SIZE_OF_GRID_X){|x| x = initial_value}}
 
   return new_grid
 end
