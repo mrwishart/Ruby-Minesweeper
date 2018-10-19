@@ -32,6 +32,9 @@ win = has_won(no_of_uncovered)
 
 lose = false
 
+#Display intro
+intro
+
 until (win || lose) do
 
   # Show player the grid

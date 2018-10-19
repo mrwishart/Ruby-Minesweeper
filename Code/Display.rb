@@ -92,3 +92,12 @@ def final_message (solution, won)
     puts "Whoops, you hit a bomb!"
   end
 end
+
+def intro
+  puts "********************************"
+  puts "*  Paul Wishart's MINESWEEPER  *"
+  puts "********************************"
+  puts
+  puts
+  puts 
+end
