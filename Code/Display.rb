@@ -79,9 +79,10 @@ end
 
 def generate_surrounding_spaces(x, y)
    surround_array = []
-
+# Loop over 3x3 grid
   for i in x-1..x+1
     for j in y-1..y+1
+      # Exclude the center square and ones not on the grid
       if ((i==x) && (j==y)) || !is_on_grid(i,j)
         next
       end
@@ -92,18 +93,30 @@ def generate_surrounding_spaces(x, y)
   return surround_array
 end
 
-def uncover_square(player, solution, x, y, exclude)
+def uncover_square(player, solution, x, y, exclude, uncovered_sqs)
+  # Move square from solution to player display
   player[y][x] = solution [y][x]
+  # Add another uncovered square to total
+  uncovered_sqs+=1
+  # In case the player hits 0 and to avoid infinite iteration, exlude array stops program from going over the same square twice
   exclude.push([y,x])
+
   if solution [y][x] == 0
+
     surround = generate_surrounding_spaces(x,y)
+
     for space in surround
+
       if !exclude.include?(space)
-        uncover_square(player, solution, space[1], space[0], exclude)
+
+        uncovered_sqs = uncover_square(player, solution, space[1], space[0], exclude, uncovered_sqs)
+
       end
+
     end
   end
 
+  return uncovered_sqs
 end
 
 
@@ -119,4 +132,15 @@ def is_on_grid(x,y)
   else
     return true
   end
+end
+
+def has_won(uncovered)
+  return uncovered == WINNING_STATE
+end
+
+def has_lost(player_array)
+  for row in player_array
+    return true if row.include?(BOMB_CHAR)
+  end
+  return false
 end

@@ -1,7 +1,8 @@
 SIZE_OF_GRID_X = 20 #Maximum is 26, do not exceed!
 SIZE_OF_GRID_Y = 20
 OVERALL_AREA = SIZE_OF_GRID_X * SIZE_OF_GRID_Y
-NO_OF_BOMBS = 50
+NO_OF_BOMBS = 399
+WINNING_STATE = OVERALL_AREA - NO_OF_BOMBS
 BOMB_CHAR = "@"
 
 def generate_grid(initial_value)
