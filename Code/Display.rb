@@ -24,6 +24,7 @@ def display_grid(grid_array)
     puts row_string
     row_number += 1
   end
+  
 end
 
 # Generates an array of the alphabet
@@ -94,31 +95,49 @@ def generate_surrounding_spaces(x, y)
 end
 
 def uncover_square(player, solution, x, y, exclude, uncovered_sqs)
-  # Move square from solution to player display
-  player[y][x] = solution [y][x]
-  # Add another uncovered square to total
-  uncovered_sqs+=1
-  # In case the player hits 0 and to avoid infinite iteration, exlude array stops program from going over the same square twice
-  exclude.push([y,x])
+  # Check square hasn't already been uncovered
+  if player[y][x]!= solution [y][x]
+    # Move square from solution to player display
+    player[y][x] = solution [y][x]
+    # Add another uncovered square to total
+    uncovered_sqs+=1
+    # In case the player hits 0 and to avoid infinite iteration, exlude array stops program from going over the same square twice
+    exclude.push([y,x])
 
-  if solution [y][x] == 0
+    if solution [y][x] == 0
 
-    surround = generate_surrounding_spaces(x,y)
+      surround = generate_surrounding_spaces(x,y)
 
-    for space in surround
+      for space in surround
+        #If current space hasn't already been uncovered
+        if !exclude.include?(space)
 
-      if !exclude.include?(space)
+          uncovered_sqs = uncover_square(player, solution, space[1], space[0], exclude, uncovered_sqs)
 
-        uncovered_sqs = uncover_square(player, solution, space[1], space[0], exclude, uncovered_sqs)
+        end
 
       end
-
     end
   end
 
   return uncovered_sqs
 end
 
+def check_input (input_string)
+  first_grid = input_string[0].upcase
+  second_grid = input_string[1..2].to_i
+
+  return first_valid(first_grid) && second_valid(second_grid)
+end
+
+def first_valid(letter)
+  range_of_letters = create_alphabet.slice(0, SIZE_OF_GRID_X)
+  return range_of_letters.include?(letter)
+end
+
+def second_valid(number)
+  return number > 0 && number <= SIZE_OF_GRID_Y
+end
 
 def is_bomb(space)
   return space == BOMB_CHAR
